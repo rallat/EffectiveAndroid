@@ -19,3 +19,4 @@ out
 *.iws
 *.iml
 local.properties
+fabric.properties

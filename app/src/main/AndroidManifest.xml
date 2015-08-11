@@ -2,19 +2,40 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.israelferrer.effectiveandroid" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".EffectiveAndroidApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/app_name" >
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoDisplay" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="8c3bdab663aed5c0fe16b43596885eb3b36fefe1" />
+
+        <activity
+            android:name=".activities.ArticleListActivity"
+            android:label="@string/title_activity_article_list" >
+        </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="@string/title_activity_article_list" >
+        </activity>
+        <activity
+            android:name=".activities.ArticleActivity"
+            android:label="@string/title_activity_article" >
         </activity>
     </application>
 
