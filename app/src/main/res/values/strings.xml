@@ -3,8 +3,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="try_again">Try again later</string>
-    <string name="title_activity_article_list">ArticleListActivity</string>
     <string name="action_logout">Logout</string>
-    <string name="title_activity_article">ArticleActivity</string>
     <string name="media"/>
+    <string name="top_images">Top Images</string>
+    <string name="top_articles">Top Articles</string>
+    <string name="avatar_description">avatar picture</string>
 </resources>

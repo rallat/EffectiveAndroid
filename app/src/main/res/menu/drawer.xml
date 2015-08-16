@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_top_articles"
+            android:icon="@drawable/ic_collections_bookmark_black_24dp"
+            android:title="@string/top_articles"/>
+
+        <item
+            android:id="@+id/drawer_top_images"
+            android:icon="@drawable/ic_collections_black_24dp"
+            android:title="@string/top_images"/>
+    </group>
+</menu>

@@ -1,4 +1,4 @@
-package com.israelferrer.effectiveandroid.activities;
+package com.israelferrer.effectiveandroid.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,19 +8,20 @@ import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.israelferrer.effectiveandroid.R;
-import com.israelferrer.effectiveandroid.models.Article;
+import com.israelferrer.effectiveandroid.entities.Article;
 import com.twitter.sdk.android.core.TwitterCore;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ArticleActivity extends AppCompatActivity {
+    public static final String EXTRA_ARTICLE = "article";
+    public static final String TRANSITION_SHARED_ELEMENT = "title";
 
     @Bind(R.id.cv)
     CardView cardView;
@@ -36,17 +37,21 @@ public class ArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        Article article = extras.getParcelable("article");
+        Article article = extras.getParcelable(EXTRA_ARTICLE);
 
         setContentView(R.layout.activity_article);
         ButterKnife.bind(this);
 
         View innerContainer = cardView.findViewById(R.id.container_inner_item);
-        ViewCompat.setTransitionName(innerContainer, "TITLE");
-        titleView.setText(article.getTitle());
-        retweetView.setText(article.getRetweetCount());
-        webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl(article.getUrl());
+        ViewCompat.setTransitionName(innerContainer, TRANSITION_SHARED_ELEMENT);
+        if (article != null) {
+            titleView.setText(article.getTitle());
+            retweetView.setText(article.getRetweetCount());
+            webView.setWebViewClient(new WebViewClient());
+            webView.loadUrl(article.getUrl());
+        } else {
+            finish();
+        }
     }
 
     @Override
@@ -59,10 +64,6 @@ public class ArticleActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_logout) {
             logout();
             return true;

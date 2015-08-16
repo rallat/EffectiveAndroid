@@ -1,4 +1,4 @@
-package com.israelferrer.effectiveandroid.activities;
+package com.israelferrer.effectiveandroid.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,6 +24,6 @@ public class MainActivity extends Activity {
 
     private void startApp() {
         finish();
-        startActivity(new Intent(this, ArticleListActivity.class));
+        startActivity(new Intent(this, TopArticleListActivity.class));
     }
 }

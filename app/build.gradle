@@ -59,7 +59,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile('com.twitter.sdk.android:twitter-core:1.4.2@aar') {
+    compile('com.twitter.sdk.android:twitter-core:1.4.3@aar') {
         transitive = true;
     }
     testCompile 'junit:junit:4.12'

@@ -1,4 +1,4 @@
-package com.israelferrer.effectiveandroid.models;
+package com.israelferrer.effectiveandroid.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -59,7 +59,7 @@ public class Article implements Comparable<Article>, Parcelable {
 
     @Override
     public int compareTo(@NonNull Article another) {
-        if (this.equals(another)) return 0;
+        if (this.equals(another) || this.retweetCount == another.retweetCount) return 0;
         return (this.retweetCount > another.retweetCount) ? -1 : 1;
     }
 

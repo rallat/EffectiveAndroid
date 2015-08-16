@@ -1,11 +1,11 @@
-package com.israelferrer.effectiveandroid.activities;
+package com.israelferrer.effectiveandroid.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,42 +15,35 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.israelferrer.effectiveandroid.service.CustomApiClient;
+import com.israelferrer.effectiveandroid.PresenterHolder;
 import com.israelferrer.effectiveandroid.R;
-import com.israelferrer.effectiveandroid.models.Article;
-import com.israelferrer.effectiveandroid.recycler.ArticleRecyclerView;
-import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.Result;
+import com.israelferrer.effectiveandroid.entities.Article;
+import com.israelferrer.effectiveandroid.presenters.TopArticleListPresenter;
+import com.israelferrer.effectiveandroid.presenters.TopArticleListPresenterImpl;
+import com.israelferrer.effectiveandroid.ui.recycler.ArticleRecyclerView;
+import com.israelferrer.effectiveandroid.ui.views.TopArticleListView;
 import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.models.Tweet;
-import com.twitter.sdk.android.core.models.UrlEntity;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
-public class ArticleListActivity extends AppCompatActivity implements RecyclerView.OnItemTouchListener {
+public class TopArticleListActivity extends EffectiveActivity implements RecyclerView
+        .OnItemTouchListener, TopArticleListView {
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
     private ArticleRecyclerView adapter;
     private GestureDetectorCompat gestureDetector;
+    private TopArticleListPresenter presenter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article_list);
-        ButterKnife.bind(this);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
-
 
         // allows for optimizations if all items are of the same size:
         recyclerView.setHasFixedSize(true);
@@ -58,36 +51,34 @@ public class ArticleListActivity extends AppCompatActivity implements RecyclerVi
         recyclerView.addOnItemTouchListener(this);
         gestureDetector =
                 new GestureDetectorCompat(this, new RecyclerViewDemoOnGestureListener());
-        new CustomApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession())
-                .getTimelineService()
-                .homeTimeline(200, true, true, true, true, new Callback<List<Tweet>>() {
-                    @Override
-                    public void success(Result<List<Tweet>> result) {
-                        final List<Article> items = new ArrayList<>();
-                        for (Tweet tweet : result.data) {
-                            if (tweet.entities.urls.size() > 0 && isEligibleDomain(tweet.entities
-                                    .urls)) {
-                                items.add(Article.create(tweet));
-                            }
-                        }
-                        Collections.sort(items);
-                        adapter = new ArticleRecyclerView(items);
-                        recyclerView.setAdapter(adapter);
-                    }
 
-                    @Override
-                    public void failure(TwitterException e) {
-                        logout();
-                    }
-                });
+        presenter = createPresenter();
+        presenter.create();
     }
 
-    private boolean isEligibleDomain(List<UrlEntity> urls) {
-        final String url = urls.get(0).expandedUrl;
-        return !url.contains("twitter.com") && !url.contains("goo.gl") &&
-                !url.contains("vine.co") && !url.contains("vimeo.com") &&
-                !url.contains("youtube.com") && !url.contains("youtu.be");
+    @NonNull
+    @Override
+    Integer getLayout() {
+        return R.layout.activity_article_list;
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        presenter.setView(null);
+        PresenterHolder.getInstance().putPresenter(TopArticleListActivity.class, presenter);
+    }
+
+    public TopArticleListPresenter createPresenter() {
+        TopArticleListPresenter presenter = PresenterHolder.getInstance().getPresenter
+                (TopArticleListPresenter.class);
+        if (presenter != null) {
+            presenter.setView(this);
+        } else {
+            presenter = new TopArticleListPresenterImpl(this);
+        }
+        return presenter;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,22 +90,11 @@ public class ArticleListActivity extends AppCompatActivity implements RecyclerVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_logout) {
             logout();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void logout() {
-        TwitterCore.getInstance().logOut();
-        finish();
-        startActivity(new Intent(this, LoginActivity.class));
     }
 
     @Override
@@ -130,6 +110,19 @@ public class ArticleListActivity extends AppCompatActivity implements RecyclerVi
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+    }
+
+    @Override
+    public void setArticles(List<Article> articles) {
+        adapter = new ArticleRecyclerView(articles);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void logout() {
+        TwitterCore.getInstance().logOut();
+        finish();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     private class RecyclerViewDemoOnGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -149,9 +142,10 @@ public class ArticleListActivity extends AppCompatActivity implements RecyclerVi
         Article data = adapter.getItem(position);
         View innerContainer = view.findViewById(R.id.container_inner_item);
         Intent startIntent = new Intent(this, ArticleActivity.class);
-        startIntent.putExtra("article", data);
+        startIntent.putExtra(ArticleActivity.EXTRA_ARTICLE, data);
         ActivityOptionsCompat options = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(this, innerContainer, "TITLE");
+                .makeSceneTransitionAnimation(this, innerContainer, ArticleActivity
+                        .TRANSITION_SHARED_ELEMENT);
         ActivityCompat.startActivity(this, startIntent, options.toBundle());
     }
 

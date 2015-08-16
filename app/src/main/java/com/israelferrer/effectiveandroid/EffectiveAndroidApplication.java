@@ -14,8 +14,12 @@ public class EffectiveAndroidApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.CONSUMER_KEY,BuildConfig
-                .CONSUMER_SECRET);
+        setUpFabric();
+    }
+
+    public void setUpFabric() {
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.CONSUMER_KEY,
+                BuildConfig.CONSUMER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig));
     }
 }

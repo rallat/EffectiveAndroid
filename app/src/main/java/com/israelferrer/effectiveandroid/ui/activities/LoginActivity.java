@@ -1,4 +1,4 @@
-package com.israelferrer.effectiveandroid.activities;
+package com.israelferrer.effectiveandroid.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,10 +17,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
-
     @Bind(R.id.twitter_login_button) TwitterLoginButton loginButton;
     @Bind(R.id.login_container) RelativeLayout loginContainer;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void startApp() {
         finish();
-        startActivity(new Intent(this, ArticleListActivity.class));
+        startActivity(new Intent(this, TopArticleListActivity.class));
     }
 
     @Override

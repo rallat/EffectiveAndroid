@@ -1,4 +1,4 @@
-package com.israelferrer.effectiveandroid.recycler;
+package com.israelferrer.effectiveandroid.ui.recycler;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.israelferrer.effectiveandroid.R;
-import com.israelferrer.effectiveandroid.models.Article;
+import com.israelferrer.effectiveandroid.entities.Article;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -45,7 +45,6 @@ public class ArticleRecyclerView extends RecyclerView.Adapter<ArticleRecyclerVie
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
         final Article article = items.get(position);
         holder.title.setText(article.getTitle());
-        holder.description.setText(article.getUrl());
         holder.retweet.setText(article.getRetweetCount());
         if (!TextUtils.isEmpty(article.getMediaUrl())) {
             holder.media.setVisibility(View.VISIBLE);
@@ -67,8 +66,6 @@ public class ArticleRecyclerView extends RecyclerView.Adapter<ArticleRecyclerVie
     final static class ArticleViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.title)
         TextView title;
-        @Bind(R.id.url)
-        TextView description;
         @Bind(R.id.retweet)
         TextView retweet;
         @Bind(R.id.media)

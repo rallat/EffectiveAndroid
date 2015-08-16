@@ -1,18 +1,30 @@
 package com.israelferrer.effectiveandroid.service;
 
-import com.israelferrer.effectiveandroid.service.TimelineService;
-import com.twitter.sdk.android.core.Session;
+import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.models.User;
 
 /**
  * Created by icamacho on 8/9/15.
  */
 public class CustomApiClient extends TwitterApiClient {
-    public CustomApiClient(Session session) {
+    private final TwitterSession session;
+
+    public CustomApiClient(TwitterSession session) {
         super(session);
+        this.session = session;
     }
 
     public TimelineService getTimelineService() {
-        return (TimelineService) this.getService(TimelineService.class);
+        return this.getService(TimelineService.class);
+    }
+
+    public UserService getUserService() {
+        return this.getService(UserService.class);
+    }
+
+    public void userShow(Callback<User> callback) {
+        getUserService().userShow(session.getUserName(), true, callback);
     }
 }

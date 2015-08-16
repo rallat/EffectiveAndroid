@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoDisplay" >
             <intent-filter>
@@ -26,16 +26,21 @@
             android:value="8c3bdab663aed5c0fe16b43596885eb3b36fefe1" />
 
         <activity
-            android:name=".activities.ArticleListActivity"
-            android:label="@string/title_activity_article_list" >
+            android:name=".ui.activities.TopArticleListActivity"
+            android:label="@string/top_articles" >
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
-            android:label="@string/title_activity_article_list" >
+            android:name=".ui.activities.LoginActivity" >
         </activity>
         <activity
-            android:name=".activities.ArticleActivity"
-            android:label="@string/title_activity_article" >
+            android:name=".ui.activities.ArticleActivity" >
+        </activity>
+        <activity
+            android:name=".ui.activities.TopImagesListActivity"
+            android:label="@string/top_images" >
+        </activity>
+        <activity
+            android:name=".ui.activities.ImageActivity" >
         </activity>
     </application>
 
