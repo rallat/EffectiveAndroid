@@ -2,7 +2,7 @@ package com.israelferrer.effectiveandroid.presenters;
 
 import com.israelferrer.effectiveandroid.BuildConfig;
 import com.israelferrer.effectiveandroid.entities.Article;
-import com.israelferrer.effectiveandroid.models.TopArticleListModel;
+import com.israelferrer.effectiveandroid.interactors.GetTopArticles;
 import com.israelferrer.effectiveandroid.ui.views.TopArticleListView;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -33,14 +33,14 @@ public class TopArticleListPresenterTest {
 
     private ArgumentCaptor<Callback> callbackCaptor;
     private TopArticleListPresenterImpl presenter;
-    private TopArticleListModel model;
+    private GetTopArticles useCase;
     private TopArticleListView view;
 
     @Before
     public void setUp() throws Exception {
         view = mock(TopArticleListView.class);
-        model = mock(TopArticleListModel.class);
-        presenter = new TopArticleListPresenterImpl(view, model);
+        useCase = mock(GetTopArticles.class);
+        presenter = new TopArticleListPresenterImpl(view, useCase);
         callbackCaptor = ArgumentCaptor.forClass(Callback.class);
     }
 
@@ -49,7 +49,7 @@ public class TopArticleListPresenterTest {
     public void testCreate_success() throws Exception {
         presenter.create();
 
-        verify(model).getMostRtArticles(callbackCaptor.capture());
+        verify(useCase).execute(callbackCaptor.capture());
         Callback<List<Article>> callback = callbackCaptor.getValue();
         callback.success(ANY_RESULT);
         verify(view).setArticles(ANY_RESULT.data);
@@ -57,10 +57,20 @@ public class TopArticleListPresenterTest {
 
     @SuppressWarnings("unchecked")
     @Test
+    public void testCreate_successNullView() throws Exception {
+        presenter.create();
+        presenter.setView(null);
+        verify(useCase).execute(callbackCaptor.capture());
+        Callback<List<Article>> callback = callbackCaptor.getValue();
+        callback.success(ANY_RESULT);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
     public void testCreate_failure() throws Exception {
         presenter.create();
 
-        verify(model).getMostRtArticles(callbackCaptor.capture());
+        verify(useCase).execute(callbackCaptor.capture());
         Callback<List<Article>> callback = callbackCaptor.getValue();
         callback.failure(ANY_EXCEPTION);
         verify(view).logout();

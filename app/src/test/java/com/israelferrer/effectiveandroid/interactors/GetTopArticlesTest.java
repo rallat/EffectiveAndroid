@@ -1,9 +1,8 @@
-package com.israelferrer.effectiveandroid.models;
+package com.israelferrer.effectiveandroid.interactors;
 
 import com.israelferrer.effectiveandroid.BuildConfig;
 import com.israelferrer.effectiveandroid.entities.Article;
-import com.israelferrer.effectiveandroid.service.CustomApiClient;
-import com.israelferrer.effectiveandroid.service.TimelineService;
+import com.israelferrer.effectiveandroid.repository.TweetRepository;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -27,43 +26,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by icamacho on 8/15/15.
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
-public class TopArticleListModelTest {
+public class GetTopArticlesTest {
     private static final TwitterException ANY_EXCEPTION = new TwitterException("Random Exception");
     private static final long TWEET_ID = 582295217115541505L;
 
+
+    private GetTopArticlesImpl useCase;
     @Mock
-    private CustomApiClient client;
+    private TweetRepository model;
     @Mock
     private Callback<List<Article>> callback;
-    @Mock
-    private TimelineService timelineService;
     @Captor
-    private ArgumentCaptor<Callback<List<Tweet>>> callbackArgumentCaptor;
+    private ArgumentCaptor<Callback> callbackArgumentCaptor;
+
     @Captor
     private ArgumentCaptor<Result<List<Article>>> articleArgumentCaptor;
-    private TopTopArticleListModelImpl model;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        when(client.getTimelineService()).thenReturn(timelineService);
-        model = new TopTopArticleListModelImpl(client);
+        useCase = new GetTopArticlesImpl(model);
     }
 
     @Test
     public void testGetMostRtArticles_failure() throws Exception {
-        model.getMostRtArticles(callback);
-        verify(timelineService).homeTimeline(eq(200), eq(true), eq(true), eq(true), eq(true),
-                callbackArgumentCaptor.capture());
+        useCase.execute(callback);
+        verify(model).getTimeline(callbackArgumentCaptor.capture());
         Callback<List<Tweet>> callbackApi = callbackArgumentCaptor.getValue();
         callbackApi.failure(ANY_EXCEPTION);
         verify(callback).failure(ANY_EXCEPTION);
@@ -71,9 +66,8 @@ public class TopArticleListModelTest {
 
     @Test
     public void testGetMostRtArticles_success() throws Exception {
-        model.getMostRtArticles(callback);
-        verify(timelineService).homeTimeline(eq(200), eq(true), eq(true), eq(true), eq(true),
-                callbackArgumentCaptor.capture());
+        useCase.execute(callback);
+        verify(model).getTimeline(callbackArgumentCaptor.capture());
         Callback<List<Tweet>> callbackApi = callbackArgumentCaptor.getValue();
         callbackApi.success(new Result<>(createTweets(), null));
         List<Article> expectedArticles = new ArrayList<>();

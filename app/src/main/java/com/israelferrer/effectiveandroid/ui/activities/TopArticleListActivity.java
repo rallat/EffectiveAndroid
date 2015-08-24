@@ -9,6 +9,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +52,6 @@ public class TopArticleListActivity extends EffectiveActivity implements Recycle
         recyclerView.addOnItemTouchListener(this);
         gestureDetector =
                 new GestureDetectorCompat(this, new RecyclerViewDemoOnGestureListener());
-
         presenter = createPresenter();
         presenter.create();
     }
@@ -66,6 +66,14 @@ public class TopArticleListActivity extends EffectiveActivity implements Recycle
     protected void onSaveInstanceState(Bundle bundle) {
         presenter.setView(null);
         PresenterHolder.getInstance().putPresenter(TopArticleListActivity.class, presenter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isFinishing()) {
+            PresenterHolder.getInstance().remove(TopArticleListActivity.class);
+        }
     }
 
     public TopArticleListPresenter createPresenter() {

@@ -59,10 +59,7 @@ public class TopImageListModelImpl implements TopImageListModel {
     }
 
     private boolean isElegibleImage(List<MediaEntity> mediaEntities) {
-        if (mediaEntities == null || mediaEntities.get(0) == null || !mediaEntities.get(0).type
-                .equals("photo")) {
-            return false;
-        }
-        return true;
+        return !(mediaEntities == null || mediaEntities.get(0) == null || !mediaEntities.get(0).type
+                .equals("photo"));
     }
 }

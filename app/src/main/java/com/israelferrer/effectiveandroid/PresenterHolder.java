@@ -11,7 +11,7 @@ import java.util.Map;
 public class PresenterHolder {
     static volatile PresenterHolder singleton = null;
 
-    private Map<Class, Presenter> presenterMap;
+    private final Map<Class, Presenter> presenterMap;
 
 
     public static PresenterHolder getInstance() {
@@ -37,4 +37,7 @@ public class PresenterHolder {
         return (T) presenterMap.get(c);
     }
 
+    public void remove(Class  c) {
+        presenterMap.remove(c);
+    }
 }
