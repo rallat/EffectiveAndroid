@@ -2,7 +2,7 @@ package com.israelferrer.effectiveandroid.presenters;
 
 import com.israelferrer.effectiveandroid.entities.Article;
 import com.israelferrer.effectiveandroid.models.TopArticleListModel;
-import com.israelferrer.effectiveandroid.models.TopTopArticleListModelImpl;
+import com.israelferrer.effectiveandroid.models.TopArticleListModelImpl;
 import com.israelferrer.effectiveandroid.ui.views.TopArticleListView;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -21,7 +21,7 @@ public class TopArticleListPresenterImpl implements TopArticleListPresenter {
     private List<Article> viewArticles;
 
     public TopArticleListPresenterImpl(TopArticleListView view) {
-        this(view, new TopTopArticleListModelImpl(TwitterCore.getInstance().getSessionManager().
+        this(view, new TopArticleListModelImpl(TwitterCore.getInstance().getSessionManager().
                 getActiveSession()));
     }
 

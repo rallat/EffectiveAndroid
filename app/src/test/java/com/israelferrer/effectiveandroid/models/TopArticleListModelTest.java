@@ -50,13 +50,13 @@ public class TopArticleListModelTest {
     private ArgumentCaptor<Callback<List<Tweet>>> callbackArgumentCaptor;
     @Captor
     private ArgumentCaptor<Result<List<Article>>> articleArgumentCaptor;
-    private TopTopArticleListModelImpl model;
+    private TopArticleListModelImpl model;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         when(client.getTimelineService()).thenReturn(timelineService);
-        model = new TopTopArticleListModelImpl(client);
+        model = new TopArticleListModelImpl(client);
     }
 
     @Test

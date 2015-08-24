@@ -20,14 +20,14 @@ import java.util.List;
 /**
  * Created by icamacho on 8/15/15.
  */
-public class TopTopArticleListModelImpl implements TopArticleListModel {
+public class TopArticleListModelImpl implements TopArticleListModel {
     private final CustomApiClient client;
 
-    public TopTopArticleListModelImpl(TwitterSession session) {
+    public TopArticleListModelImpl(TwitterSession session) {
         this(new CustomApiClient(session));
     }
 
-    TopTopArticleListModelImpl(CustomApiClient client) {
+    TopArticleListModelImpl(CustomApiClient client) {
         this.client = client;
     }
 
