@@ -59,7 +59,15 @@ public class TopImagesListActivity extends EffectiveActivity implements Recycler
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         presenter.setView(null);
-        PresenterHolder.getInstance().putPresenter(TopArticleListActivity.class, presenter);
+        PresenterHolder.getInstance().putPresenter(TopImagesListPresenter.class, presenter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (this.isFinishing()) {
+            PresenterHolder.getInstance().remove(TopImagesListPresenters.class);
+        }
     }
 
     public TopImagesListPresenter createPresenter() {

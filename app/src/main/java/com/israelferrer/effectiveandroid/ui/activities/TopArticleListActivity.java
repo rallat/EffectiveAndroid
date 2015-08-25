@@ -20,6 +20,7 @@ import com.israelferrer.effectiveandroid.R;
 import com.israelferrer.effectiveandroid.entities.Article;
 import com.israelferrer.effectiveandroid.presenters.TopArticleListPresenter;
 import com.israelferrer.effectiveandroid.presenters.TopArticleListPresenterImpl;
+import com.israelferrer.effectiveandroid.presenters.TopImagesListPresenter;
 import com.israelferrer.effectiveandroid.ui.recycler.ArticleRecyclerView;
 import com.israelferrer.effectiveandroid.ui.views.TopArticleListView;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -66,6 +67,14 @@ public class TopArticleListActivity extends EffectiveActivity implements Recycle
     protected void onSaveInstanceState(Bundle bundle) {
         presenter.setView(null);
         PresenterHolder.getInstance().putPresenter(TopArticleListActivity.class, presenter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (this.isFinishing()) {
+            PresenterHolder.getInstance().remove(TopArticleListActivity.class);
+        }
     }
 
     public TopArticleListPresenter createPresenter() {

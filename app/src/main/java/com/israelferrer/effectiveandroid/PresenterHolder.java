@@ -33,8 +33,11 @@ public class PresenterHolder {
         presenterMap.put(c, p);
     }
 
-    public <T extends Presenter> T getPresenter(Class<T>  c) {
+    public <T extends Presenter> T getPresenter(Class<T> c) {
         return (T) presenterMap.get(c);
     }
 
+    public void remove(Class c) {
+        presenterMap.remove(c);
+    }
 }
