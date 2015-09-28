@@ -41,11 +41,12 @@ public class TopArticleListPresenterImpl implements TopArticleListPresenter {
 
                 @Override
                 public void failure(TwitterException e) {
-                    view.logout();
+                    if (view != null) {
+                        view.logout();
+                    }
                 }
             });
         } else {
-            view.setArticles(viewArticles);
             setArticles(viewArticles);
         }
     }

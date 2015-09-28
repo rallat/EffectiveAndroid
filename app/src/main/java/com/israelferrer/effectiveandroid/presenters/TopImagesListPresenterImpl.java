@@ -40,7 +40,9 @@ public class TopImagesListPresenterImpl implements TopImagesListPresenter {
 
                 @Override
                 public void failure(TwitterException e) {
-                    view.logout();
+                    if (view != null) {
+                        view.logout();
+                    }
                 }
             });
         } else {
