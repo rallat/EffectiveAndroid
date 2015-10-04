@@ -66,7 +66,7 @@ public class TopImagesListActivity extends EffectiveActivity implements Recycler
     protected void onDestroy() {
         super.onDestroy();
         if (this.isFinishing()) {
-            PresenterHolder.getInstance().remove(TopImagesListPresenters.class);
+            PresenterHolder.getInstance().remove(TopImagesListPresenter.class);
         }
     }
 
