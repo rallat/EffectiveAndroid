@@ -1,0 +1,6 @@
+# Read https://docs.fabric.io/android/fabric/integration.html#add-api-key-and-build-secret
+# Create a “fabric.properties” file in your app directory
+# Twitter consumer keys can be generated at apps.twitter.com
+
+twitterConsumerKey = YOUR_TWITTER_CONSUMER_KEY
+twitterConsumerSecret = YOUR_TWITTER_CONSUMER_SECRET
