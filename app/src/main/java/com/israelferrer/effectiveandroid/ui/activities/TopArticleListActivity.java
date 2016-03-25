@@ -66,14 +66,14 @@ public class TopArticleListActivity extends EffectiveActivity implements Recycle
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         presenter.setView(null);
-        PresenterHolder.getInstance().putPresenter(TopArticleListActivity.class, presenter);
+        PresenterHolder.getInstance().putPresenter(TopArticleListPresenter.class, presenter);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (this.isFinishing()) {
-            PresenterHolder.getInstance().remove(TopArticleListActivity.class);
+            PresenterHolder.getInstance().remove(TopArticleListPresenter.class);
         }
     }
 
